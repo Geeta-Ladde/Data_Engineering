@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="09deb8d5-660a-46b9-85aa-691cd392c4ba" name="Changes" comment="" />
+    <list default="true" id="09deb8d5-660a-46b9-85aa-691cd392c4ba" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/01_dimension_data_modeling/Incremental_query_actors_history_scd.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/01_dimension_data_modeling/backfill_query _actors_history_scd.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/01_dimension_data_modeling/cumulative_table_generation.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/01_dimension_data_modeling/ddl_actor_table.sql" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/01_dimension_data_modeling/ddl_actors_history_scd_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,14 +21,20 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="32UA9irQmVvD0TXerHeYWBGCiRU" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/dimension_data_modeling" />
+    </key>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -36,5 +53,22 @@
       <updated>1757464627892</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="false" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
