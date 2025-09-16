@@ -8,7 +8,7 @@ spark = SparkSession.builder \
     .getOrCreate()
 
 # Load data - adjust paths as needed
-base_path = "../../data"
+base_path = "../data"
 
 tables = {
     "match_details": spark.read.option("header", "true").option("inferSchema", "true").csv(

@@ -16,7 +16,7 @@ spark = SparkSession.builder \
 
 # Path from src/tests/ to data folder
 # src/tests/ -> src/ -> 3-spark-fundamentals/ -> data/
-base_path = "../../data"
+base_path = "../data"
 
 print("Testing homework from tests folder...")
 print(f"Current directory: {os.getcwd()}")
@@ -134,3 +134,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
