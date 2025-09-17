@@ -1,3 +1,23 @@
 .idea/
 MyProjects-github/
 .DS_Store
+# Debug files
+debug_paths.py
+**/debug_paths.py
+
+# Zip files
+*.zip
+**/*.zip
+
+# Spark temporary files
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Output directories
+output/
+**/output/
