@@ -293,9 +293,11 @@ Senior Data Quality Engineer | AWS Certified Data Engineer
 
 ---
 
-## 📝 License
+## 📝 Portfolio Note
 
-This project is created for educational purposes as part of the DataExpert.io bootcamp curriculum.
+## 📝 Portfolio Note
+
+A demonstration of production-ready data engineering patterns including dimensional data modeling, SCD Type 2 implementation, and complex SQL development.
 
 ---
 
