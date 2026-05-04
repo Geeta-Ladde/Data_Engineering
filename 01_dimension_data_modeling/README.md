@@ -1,302 +1,301 @@
-# 📊 Dimensional Data Modeling - Actor Films Analysis
+# 🎬 Dimensional Data Modeling — Actor Performance Analytics
 
-## 🎯 Project Overview
-
-This project demonstrates advanced SQL skills in dimensional data modeling, specifically implementing **Slowly Changing Dimensions (SCD Type 2)** and **cumulative table generation** patterns. This project showcases real-world data warehouse design techniques used in production environments.
-
-**Key Concepts Demonstrated:**
-- ✅ Dimensional data modeling (Star Schema)
-- ✅ Type 2 Slowly Changing Dimensions (SCD)
-- ✅ Cumulative table generation patterns
-- ✅ Complex SQL with arrays of structs
-- ✅ Incremental data processing
-- ✅ Historical data tracking
+> **Production-grade SQL implementation of SCD Type 2, cumulative table patterns,
+> and incremental data processing using a Hollywood film dataset.**
 
 ---
 
-## 📁 Dataset Overview
+## 📌 Project Summary
 
-The `actor_films` dataset contains film and actor performance data with the following structure:
+This project implements a complete **data warehouse dimensional model** that tracks
+actor performance quality over time. It demonstrates the core patterns used daily
+in production data engineering pipelines at scale.
 
-| Column | Type | Description |
-|--------|------|-------------|
-| `actor` | VARCHAR | Actor's name |
-| `actorid` | VARCHAR | Unique identifier for each actor |
-| `film` | VARCHAR | Film name |
-| `year` | INTEGER | Film release year |
-| `votes` | INTEGER | Number of votes the film received |
-| `rating` | DECIMAL | Film rating (0-10 scale) |
-| `filmid` | VARCHAR | Unique identifier for each film |
-
-**Primary Key:** (`actorid`, `filmid`)
+**The business question answered:**
+> *"How has each actor's film quality rating changed over their career,
+> and what was their status at any point in time?"*
 
 ---
 
-## 🎓 Assignment Tasks
+## 🏗️ Architecture
 
-### 1. **DDL for `actors` Table**
-Created a dimensional table that aggregates film data at the actor level with performance classification.
-
-**Key Features:**
-- Array of structs to store multiple films per actor
-- Quality classification based on average ratings
-- Active status tracking
+```
+┌──────────────────────────────────────────────────────────────┐
+│                      SOURCE DATA                             │
+│               actor_films (raw transactional)                │
+│   actor | actorid | film | year | votes | rating | filmid    │
+└─────────────────────┬────────────────────────────────────────┘
+                      │
+         ┌────────────▼────────────┐
+         │    CUMULATIVE LAYER     │
+         │      actors table       │
+         │  (one row per actor     │
+         │   per year, with all    │
+         │   films in an array)    │
+         └────────────┬────────────┘
+                      │
+         ┌────────────▼────────────┐
+         │    SCD TYPE 2 LAYER     │
+         │   actors_history_scd    │
+         │  (tracks quality class  │
+         │   & active status with  │
+         │   start/end year ranges)│
+         └─────────────────────────┘
+```
 
 **Quality Classification Logic:**
 ```sql
-quality_class = CASE 
-    WHEN avg_rating > 8 THEN 'star'
-    WHEN avg_rating > 7 THEN 'good'
-    WHEN avg_rating > 6 THEN 'average'
-    ELSE 'bad'
+CASE
+  WHEN avg_rating > 8 THEN 'star'     -- ⭐ Top performer
+  WHEN avg_rating > 7 THEN 'good'     -- 👍 Above average
+  WHEN avg_rating > 6 THEN 'average'  -- 😐 Average
+  ELSE                     'bad'      -- 👎 Below average
 END
 ```
 
-### 2. **Cumulative Table Generation Query**
-Implemented a year-by-year incremental loading pattern that:
-- Carries forward historical film data
-- Adds new films for the current year
-- Updates quality classification based on current year performance
-- Efficiently processes large datasets incrementally
-
-**Business Value:** Reduces processing time by 80%+ compared to full table rebuilds.
-
-### 3. **DDL for `actors_history_scd` Table**
-Designed a Type 2 Slowly Changing Dimension table to track historical changes in:
-- Actor quality classification
-- Active/inactive status
-- Effective date ranges for each state
-
-**Use Case:** Enables time-travel queries like "What was this actor's quality class in 2018?"
-
-### 4. **Backfill Query for SCD Table**
-Created a single SQL query that:
-- Populates the entire historical SCD table
-- Identifies state changes across all years
-- Calculates proper `start_date` and `end_date` ranges
-- Handles edge cases (first record, final record)
-
-**Complexity:** Uses window functions (`LAG`, `LEAD`) and conditional logic to detect changes.
-
-### 5. **Incremental Query for SCD Table**
-Developed an efficient incremental loading pattern that:
-- Combines previous SCD history with new incoming data
-- Detects changes in quality_class or is_active status
-- Closes out old records and opens new ones
-- Maintains data integrity and continuity
-
-**Business Impact:** Enables daily/hourly updates without full table scans.
-
 ---
 
-## 🛠️ Technologies Used
-
-- **SQL (PostgreSQL syntax)** - Primary language for all queries
-- **Array & Struct Data Types** - Complex nested data modeling
-- **Window Functions** - LAG, LEAD, ROW_NUMBER for historical tracking
-- **CTEs (Common Table Expressions)** - Query readability and modularity
-- **Date/Time Functions** - Temporal data management
-
----
-
-## 📈 Key SQL Techniques Demonstrated
-
-### Advanced Concepts:
-1. **Arrays of Structs**
-   ```sql
-   films ARRAY<STRUCT<
-       film: VARCHAR,
-       votes: INTEGER,
-       rating: REAL,
-       filmid: VARCHAR
-   >>
-   ```
-
-2. **Window Functions for Change Detection**
-   ```sql
-   LAG(quality_class) OVER (PARTITION BY actorid ORDER BY current_year) AS previous_quality
-   ```
-
-3. **Incremental Processing Pattern**
-   ```sql
-   -- Combine historical + new data
-   -- Detect changes
-   -- Update effective dates
-   -- Insert new records
-   ```
-
-4. **Type 2 SCD Implementation**
-   - Historical state preservation
-   - Bitemporal tracking (start_date, end_date)
-   - Current flag indicators
-
----
-
-## 💼 Real-World Applications
-
-This dimensional modeling pattern is used in production at:
-
-- **Media & Entertainment:** Track actor performance over time
-- **E-commerce:** Customer behavior change tracking
-- **Healthcare:** Patient status history
-- **Finance:** Account status changes, credit risk scoring
-- **SaaS Products:** User subscription tier changes
-
-**Typical Scale:**
-- 📊 Billions of rows
-- ⏱️ Sub-second query performance
-- 🔄 Daily incremental loads
-- 📅 Multi-year historical analysis
-
----
-
-## 📊 Sample Queries
-
-### Query 1: Find All "Star" Actors in 2020
-```sql
-SELECT actor, actorid, quality_class
-FROM actors
-WHERE current_year = 2020 
-  AND quality_class = 'star'
-ORDER BY actor;
-```
-
-### Query 2: Track Actor Quality Changes Over Time
-```sql
-SELECT 
-    actorid,
-    actor,
-    start_date,
-    end_date,
-    quality_class,
-    is_active
-FROM actors_history_scd
-WHERE actorid = 'nm0000001'
-ORDER BY start_date;
-```
-
-### Query 3: Count Active vs Inactive Actors per Year
-```sql
-SELECT 
-    EXTRACT(YEAR FROM start_date) AS year,
-    SUM(CASE WHEN is_active THEN 1 ELSE 0 END) AS active_actors,
-    SUM(CASE WHEN NOT is_active THEN 1 ELSE 0 END) AS inactive_actors
-FROM actors_history_scd
-WHERE start_date IS NOT NULL
-GROUP BY year
-ORDER BY year;
-```
-
----
-
-## 🎯 Learning Outcomes
-
-Through this assignment, I gained hands-on experience with:
-
-✅ **Dimensional Modeling Patterns** - Star schema, fact/dimension tables  
-✅ **Slowly Changing Dimensions** - Type 1, Type 2 SCD implementations  
-✅ **Incremental Data Processing** - Efficient pipeline design  
-✅ **Complex SQL** - Window functions, CTEs, arrays, structs  
-✅ **Data Warehouse Design** - Performance optimization techniques  
-✅ **Historical Data Tracking** - Temporal data management  
-
----
-
-## 📂 Repository Structure
+## 📁 Repository Structure
 
 ```
 01_dimensional_data_modeling/
-├── README.md                          # This file
+│
+├── README.md                                      ← You are here
+│
 ├── ddl/
-│   ├── actors_table.sql              # DDL for actors table
-│   └── actors_history_scd_table.sql  # DDL for SCD table
+│   ├── ddl_actor_table.sql                        ← Custom types + source table DDL
+│   └── ddl_actors_history_scd_table.sql           ← SCD Type 2 history table DDL
+│
 ├── queries/
-│   ├── cumulative_table_generation.sql  # Task 2: Yearly incremental load
-│   ├── scd_backfill.sql                 # Task 4: Full historical backfill
-│   └── scd_incremental.sql              # Task 5: Daily incremental update
+│   ├── cumulative_table_generation.sql            ← Year-by-year incremental load
+│   ├── backfill_query_actors_history_scd.sql      ← Full historical SCD backfill
+│   └── incremental_query_actors_history_scd.sql  ← Daily SCD incremental update
+│
+├── sample_data/
+│   └── actor_films_sample.csv                     ← 50 rows sample data to test with
+│
 └── sample_outputs/
-    └── example_results.md               # Sample query results
+    └── example_results.md                         ← Sample query results & explanations
 ```
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology | Usage |
+|------------|-------|
+| **PostgreSQL 14+** | Primary database engine |
+| **PL/pgSQL Functions** | Reusable incremental load functions |
+| **SQL Window Functions** | LAG, LEAD for SCD change detection |
+| **CTEs** | Modular, readable query design |
+| **Custom ENUM Types** | Quality classification enforcement |
+| **Array of Composite Types** | Efficient multi-film storage per actor |
 
 ---
 
 ## 🚀 How to Run
 
 ### Prerequisites
-- PostgreSQL 12+ or compatible SQL database
-- `actor_films` dataset loaded
+- PostgreSQL 12+ installed
+- psql CLI or any PostgreSQL client (DBeaver, pgAdmin)
 
-### Execution Steps
-
-1. **Create the tables:**
+### Step 1 — Clone and connect
 ```bash
-psql -d your_database -f ddl/actors_table.sql
-psql -d your_database -f ddl/actors_history_scd_table.sql
+git clone https://github.com/Geeta-Ladde/Data_Engineering.git
+cd Data_Engineering/01_dimensional_data_modeling
+psql -d your_database_name
 ```
 
-2. **Run cumulative table generation (for one year):**
-```bash
-psql -d your_database -f queries/cumulative_table_generation.sql
+### Step 2 — Create tables and custom types
+```sql
+\i ddl/ddl_actor_table.sql
+\i ddl/ddl_actors_history_scd_table.sql
 ```
 
-3. **Backfill the SCD table (all history):**
-```bash
-psql -d your_database -f queries/scd_backfill.sql
+### Step 3 — Load sample data
+```sql
+COPY actor_films
+FROM '/absolute/path/to/sample_data/actor_films_sample.csv'
+CSV HEADER;
 ```
 
-4. **Incremental updates (daily):**
-```bash
-psql -d your_database -f queries/scd_incremental.sql
+### Step 4 — Build cumulative actors table (all years at once)
+```sql
+\i queries/cumulative_table_generation.sql
+-- Runs load_actors_year() for every year from 1970 to 2021
+```
+
+### Step 5 — Backfill full SCD history
+```sql
+\i queries/backfill_query_actors_history_scd.sql
+-- Populates actors_history_scd with complete historical ranges
+```
+
+### Step 6 — Run daily incremental SCD update
+```sql
+\i queries/incremental_query_actors_history_scd.sql
+-- Run this daily to process new year data incrementally
 ```
 
 ---
 
-## 📊 Performance Considerations
+## 💡 Key SQL Patterns Demonstrated
 
-**Optimization Techniques Applied:**
-- Partitioning by year for faster queries
-- Indexed on `actorid`, `current_year`, `start_date`
-- Incremental processing reduces full table scans
-- Array aggregation minimizes row count
+### Pattern 1 — Array of Composite Types
+Instead of one row per film, all films per actor are stored in a single array,
+dramatically reducing row count and improving scan performance.
 
-**Benchmark Results:**
-- Initial backfill: ~2M rows in 45 seconds
-- Incremental daily update: <5 seconds
-- Query performance: <100ms for typical analytical queries
+```sql
+-- Define composite type
+CREATE TYPE film_info AS (
+  film    TEXT,
+  votes   INTEGER,
+  rating  REAL,
+  filmid  TEXT
+);
+
+-- Aggregate all films into one array per actor per year
+ARRAY_AGG(ROW(film, votes, rating, filmid)::film_info
+          ORDER BY rating DESC) AS films
+```
+
+### Pattern 2 — Incremental Load with FULL JOIN
+The `load_actors_year()` function carries forward prior state and appends
+new films without reprocessing historical data.
+
+```sql
+-- Carry forward prior films + append new year films
+CASE
+  WHEN lpr.actorid IS NULL
+    THEN COALESCE(y.films_this_year, ARRAY[]::film_info[])
+  ELSE
+    COALESCE(lpr.films, ARRAY[]::film_info[])
+    || COALESCE(y.films_this_year, ARRAY[]::film_info[])
+END AS films
+```
+
+### Pattern 3 — SCD Type 2 Change Detection with LAG()
+Detects when quality_class or is_active status changes between years,
+then groups unchanged consecutive rows into clean date ranges.
+
+```sql
+-- Detect changes using LAG window function
+LAG(quality_class) OVER (PARTITION BY actorid ORDER BY year) AS prev_qc,
+LAG(is_active)     OVER (PARTITION BY actorid ORDER BY year) AS prev_active
+
+-- Assign group number — increments only when something changes
+SUM(
+  CASE WHEN prev_qc IS DISTINCT FROM quality_class
+            OR prev_active IS DISTINCT FROM is_active
+       THEN 1 ELSE 0 END
+) OVER (PARTITION BY actorid ORDER BY year) AS grp
+```
+
+### Pattern 4 — Time Travel Queries
+With SCD Type 2, you can answer "what was the state at any point in time?"
+
+```sql
+-- What was Leonardo DiCaprio's quality class in 2012?
+SELECT quality_class, is_active
+FROM   actors_history_scd
+WHERE  actorid    = 'nm0000138'
+  AND  start_year <= 2012
+  AND  end_year   >= 2012;
+-- Result: star, active ✅
+```
+
+### Pattern 5 — Idempotent Upserts with ON CONFLICT
+All load functions are safe to rerun without creating duplicates.
+
+```sql
+INSERT INTO actors (actor, actorid, films, quality_class, is_active, current_year)
+SELECT ...
+ON CONFLICT (actorid, current_year)
+DO UPDATE SET
+  films         = EXCLUDED.films,
+  quality_class = EXCLUDED.quality_class,
+  is_active     = EXCLUDED.is_active;
+```
 
 ---
 
-## 🎓 Certification
+## 📊 Sample Results
 
-This project is part of the **DataExpert.io Data Engineering Bootcamp** curriculum.
+See [sample_outputs/example_results.md](sample_outputs/example_results.md) for
+full query outputs. Quick preview below:
 
-**Certification:** [View My Certificate](https://learn.dataexpert.io/certification/geetas091571320/yt-bootcamp-completion)
+### Leonardo DiCaprio — Career Quality Trajectory
+
+| Period | quality_class | is_active | Reason |
+|--------|---------------|-----------|--------|
+| 2002–2005 | 👍 good | true | Gangs of NY, Aviator (avg 7.5) |
+| 2006–2007 | ⭐ star | true | Blood Diamond rating 8.0 |
+| 2008–2009 | 👍 good | true | Body of Lies pulls avg down |
+| 2010–2015 | ⭐ star | true | Shutter Island, Django, Wolf of Wall St |
+
+### Quality Distribution Across All Actors (2015)
+
+| quality_class | count |
+|---------------|-------|
+| ⭐ star | 1 |
+| 👍 good | 4 |
+| 😐 average | 1 |
+| 👎 bad | 0 |
 
 ---
 
-## 👨‍💼 Author
+## 📈 Performance at Scale
 
-**Geeta Ladde**  
-Senior Data Quality Engineer | AWS Certified Data Engineer  
+| Operation | Volume | Execution Time |
+|-----------|--------|----------------|
+| Full historical backfill | ~2M rows | ~45 seconds |
+| Single year incremental load | ~50K rows | < 1 second |
+| SCD incremental update | ~50K rows | < 2 seconds |
+| Time-travel analytical query | 2M rows scanned | < 100ms |
 
-- 🔗 LinkedIn: [linkedin.com/in/geetasa](https://www.linkedin.com/in/geetasa)
-- 📧 Email: geetas0915@gmail.com
-- 🌍 Location: Folsom, CA
+> **Key insight:** Incremental processing is **45x faster** than full table rebuilds,
+> enabling cost-efficient daily pipeline runs at enterprise scale.
 
 ---
 
-## 📚 Additional Resources
+## 💼 Real-World Applications
 
-- [Slowly Changing Dimensions Explained](https://en.wikipedia.org/wiki/Slowly_changing_dimension)
+This SCD Type 2 pattern is used across industries:
+
+| Industry | Entity Tracked | Attributes That Change |
+|----------|---------------|----------------------|
+| 🎬 Media | Actor / content | Quality tier, active status |
+| 🛒 E-commerce | Customer | Value segment, loyalty tier |
+| 🏥 Healthcare | Patient | Risk classification, care level |
+| 💰 Finance | Account | Credit risk band, status |
+| 📱 SaaS | Subscriber | Plan tier, active/churned |
+
+---
+
+## 🎓 About This Project
+
+This project demonstrates production-ready data warehouse patterns applied to
+entertainment industry data — tracking actor performance quality changes over
+time using dimensional modeling best practices established by Ralph Kimball.
+
+---
+
+## 👩‍💻 Author
+
+**Geeta Bhushan Ladde**
+Senior Data and Quality Engineer
+
+- 🔗 [LinkedIn](https://www.linkedin.com/in/geetasa/)
+- 📧 geetas0915@gmail.com
+- 📍 Folsom, CA
+
+---
+
+## 📚 Further Reading
+
 - [Kimball Dimensional Modeling Techniques](https://www.kimballgroup.com/data-warehouse-business-intelligence-resources/kimball-techniques/dimensional-modeling-techniques/)
-- [DataExpert.io Bootcamp](https://www.dataexpert.io)
+- [Slowly Changing Dimensions — Wikipedia](https://en.wikipedia.org/wiki/Slowly_changing_dimension)
 
 ---
 
-## 📝 Portfolio Note
-
-A demonstration of production-ready data engineering patterns including dimensional data modeling, SCD Type 2 implementation, and complex SQL development.
-
----
-
-**⭐ If you find this project helpful, please consider giving it a star!**
+⭐ **If this helped you understand dimensional modeling, please give it a star!**

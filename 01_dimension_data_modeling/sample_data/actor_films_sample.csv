@@ -1,0 +1,54 @@
+actor,actorid,film,year,votes,rating,filmid
+Tom Hanks,nm0000158,Forrest Gump,1994,1800000,8.8,tt0109830
+Tom Hanks,nm0000158,Cast Away,2000,320000,7.8,tt0162222
+Tom Hanks,nm0000158,The Terminal,2004,280000,7.4,tt0362227
+Tom Hanks,nm0000158,Charlie Wilson's War,2007,120000,7.0,tt0472062
+Tom Hanks,nm0000158,Angels and Demons,2009,340000,6.7,tt0808151
+Tom Hanks,nm0000158,Captain Phillips,2013,430000,7.8,tt1535109
+Tom Hanks,nm0000158,Bridge of Spies,2015,290000,7.6,tt3682448
+Tom Hanks,nm0000158,Pinocchio,2022,110000,5.2,tt4593060
+Meryl Streep,nm0000658,The Devil Wears Prada,2006,550000,6.9,tt0458352
+Meryl Streep,nm0000658,Doubt,2008,190000,7.5,tt0918927
+Meryl Streep,nm0000658,Julie and Julia,2009,160000,7.0,tt1135503
+Meryl Streep,nm0000658,The Iron Lady,2011,130000,6.4,tt1007029
+Meryl Streep,nm0000658,August Osage County,2013,120000,7.2,tt2204233
+Meryl Streep,nm0000658,Ricki and the Flash,2015,50000,6.1,tt3623726
+Meryl Streep,nm0000658,Florence Foster Jenkins,2016,90000,7.1,tt4136084
+Meryl Streep,nm0000658,The Post,2017,200000,7.2,tt6294822
+Leonardo DiCaprio,nm0000138,Gangs of New York,2002,430000,7.5,tt0217505
+Leonardo DiCaprio,nm0000138,The Aviator,2004,370000,7.5,tt0338751
+Leonardo DiCaprio,nm0000138,Blood Diamond,2006,430000,8.0,tt0450259
+Leonardo DiCaprio,nm0000138,Body of Lies,2008,210000,7.1,tt0758752
+Leonardo DiCaprio,nm0000138,Shutter Island,2010,890000,8.1,tt1130884
+Leonardo DiCaprio,nm0000138,Django Unchained,2012,1400000,8.4,tt1853728
+Leonardo DiCaprio,nm0000138,The Wolf of Wall Street,2013,1400000,8.2,tt0993846
+Leonardo DiCaprio,nm0000138,The Revenant,2015,890000,8.0,tt1663202
+Cate Blanchett,nm0000949,The Aviator,2004,370000,7.5,tt0338751
+Cate Blanchett,nm0000949,Notes on a Scandal,2006,90000,7.3,tt0454921
+Cate Blanchett,nm0000949,Elizabeth The Golden Age,2007,110000,6.9,tt0414055
+Cate Blanchett,nm0000949,The Curious Case of Benjamin Button,2008,600000,7.8,tt0421715
+Cate Blanchett,nm0000949,Robin Hood,2010,280000,6.7,tt0955308
+Cate Blanchett,nm0000949,The Gift,2015,90000,6.9,tt1825683
+Cate Blanchett,nm0000949,Carol,2015,200000,7.2,tt2402927
+Cate Blanchett,nm0000949,Thor Ragnarok,2017,780000,7.9,tt3501632
+Brad Pitt,nm0000093,Troy,2004,480000,7.3,tt0332452
+Brad Pitt,nm0000093,Mr and Mrs Smith,2005,540000,6.5,tt0356910
+Brad Pitt,nm0000093,Babel,2006,310000,7.5,tt0449467
+Brad Pitt,nm0000093,The Assassination of Jesse James,2007,160000,7.5,tt0443680
+Brad Pitt,nm0000093,Burn After Reading,2008,340000,7.0,tt0887883
+Brad Pitt,nm0000093,Inglourious Basterds,2009,1300000,8.3,tt0361748
+Brad Pitt,nm0000093,The Tree of Life,2011,200000,6.8,tt0478304
+Brad Pitt,nm0000093,Moneyball,2011,380000,7.6,tt1210166
+Brad Pitt,nm0000093,World War Z,2013,530000,7.0,tt0816711
+Brad Pitt,nm0000093,Fury,2014,530000,7.6,tt2713180
+Brad Pitt,nm0000093,Once Upon a Time in Hollywood,2019,740000,7.6,tt7131622
+Denzel Washington,nm0000243,Man on Fire,2004,370000,7.7,tt0328107
+Denzel Washington,nm0000243,Inside Man,2006,390000,7.6,tt0454848
+Denzel Washington,nm0000243,American Gangster,2007,450000,7.8,tt0765429
+Denzel Washington,nm0000243,The Taking of Pelham 123,2009,200000,6.7,tt1111422
+Denzel Washington,nm0000243,Unstoppable,2010,270000,6.8,tt0477080
+Denzel Washington,nm0000243,Safe House,2012,290000,6.7,tt1599348
+Denzel Washington,nm0000243,Flight,2012,340000,7.3,tt1907668
+Denzel Washington,nm0000243,The Equalizer,2014,430000,7.2,tt0455944
+Denzel Washington,nm0000243,The Magnificent Seven,2016,280000,6.9,tt2404435
+Denzel Washington,nm0000243,Roman J Israel Esq,2017,50000,6.5,tt6000478
