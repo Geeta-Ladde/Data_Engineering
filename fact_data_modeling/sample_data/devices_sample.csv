@@ -1,0 +1,11 @@
+device_id,browser_type,os_type,device_type
+101,Chrome,Windows,Desktop
+102,Firefox,MacOS,Desktop
+103,Safari,iOS,Mobile
+104,Chrome,Android,Mobile
+105,Edge,Windows,Desktop
+106,Safari,MacOS,Desktop
+107,Chrome,Windows,Laptop
+108,Firefox,Linux,Desktop
+109,Chrome,iOS,Mobile
+110,Safari,MacOS,Tablet
