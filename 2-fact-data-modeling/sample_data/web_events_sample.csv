@@ -1,0 +1,21 @@
+event_id,user_id,device_id,host,event_time,url
+1001,501,101,www.techblog.com,2023-01-01 08:15:00,/home
+1002,501,101,www.techblog.com,2023-01-01 08:22:00,/articles
+1003,502,102,www.techblog.com,2023-01-01 09:05:00,/home
+1004,503,103,shop.example.com,2023-01-01 09:30:00,/products
+1005,501,101,www.techblog.com,2023-01-02 10:00:00,/home
+1006,504,104,shop.example.com,2023-01-02 10:45:00,/cart
+1007,502,105,news.example.com,2023-01-02 11:00:00,/headlines
+1008,505,106,www.techblog.com,2023-01-02 11:30:00,/home
+1009,503,103,shop.example.com,2023-01-03 08:00:00,/checkout
+1010,501,101,www.techblog.com,2023-01-03 09:15:00,/articles
+1011,506,107,news.example.com,2023-01-03 10:00:00,/home
+1012,504,104,shop.example.com,2023-01-03 10:30:00,/products
+1013,502,102,www.techblog.com,2023-01-04 08:45:00,/home
+1014,507,108,news.example.com,2023-01-04 09:00:00,/sports
+1015,505,106,www.techblog.com,2023-01-04 09:30:00,/articles
+1016,503,103,shop.example.com,2023-01-05 10:00:00,/home
+1017,508,109,news.example.com,2023-01-05 10:15:00,/politics
+1018,501,101,www.techblog.com,2023-01-05 11:00:00,/home
+1019,506,107,shop.example.com,2023-01-06 08:30:00,/products
+1020,502,105,news.example.com,2023-01-06 09:00:00,/home
