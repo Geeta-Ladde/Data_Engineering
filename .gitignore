@@ -21,3 +21,6 @@ __pycache__/
 # Output directories
 output/
 **/output/
+
+.env
+*.env
